@@ -18,12 +18,12 @@ namespace TSJ.Ektron.Linq.Provider
 
         internal EktronContentQueryProvider()
         {
-            //_cm = new ContentManager();
+            _cm = new ContentManager();
         }
 
         internal EktronContentQueryProvider(ApiAccessMode mode)
         {
-           // _cm = new ContentManager(mode);
+            _cm = new ContentManager(mode);
         }
 
         public override object Execute(Expression expression)
