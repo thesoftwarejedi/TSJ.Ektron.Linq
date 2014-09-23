@@ -8,7 +8,9 @@ in github, so you'll have to create a "references" folder off the root and
 plop all the binaries in there for the HintPath to see them.  
 
 This early proof of concept is to show how it would be possible to wrap the
-Ektron API into .NET's QueryProvider syntax.  If you have ever used the Entity Framework
+Ektron API into .NET's QueryProvider syntax.  This framework accepts an expression created
+using simple lambda syntax and parses it into Criteria objects and calls to the Manager set
+of APIs as appropriate.  If you have ever used the Entity Framework
 this usage should be familiar to you.  At this time, only "ContentData" is made available
 but the framework is laid for other Manager objects from the Framework to be added
 going forward.  I plan on adding them, and additional functionality, as needed.
