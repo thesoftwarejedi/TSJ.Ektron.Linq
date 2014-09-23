@@ -10,6 +10,15 @@ using TSJ.Ektron.Linq.QueryWrapper;
 
 namespace TSJ.Ektron.Linq
 {
+        /// <summary>
+    /// This class is a work in progress.  Currently "skip" and "take" are 
+    /// better thought of as "page" and "items per page" respectively
+    /// 
+    /// Where, OrderBy, OrderByDescending, Skip, and Take are the only methods translated to Ektron.
+    /// Force execution via .AsEnumerable() before doing other work on the queryable
+    /// 
+    /// Debug thouroughly before using
+    /// </summary>
     public class EktronContext : IDisposable
     {
         private EktronContentQueryProvider _qp;
