@@ -18,6 +18,10 @@ so I release it as an open idea.
 
 NOTE: the "better way" to do this will be tracked using issue #1 in github. https://github.com/thesoftwarejedi/TSJ.Ektron.Linq
 
+DEVELOPERS: 
+- If you are cracking open this code, it'll be tough to follow from the entry to the real logic of the code.  The real code after all the glue code is located here: https://github.com/thesoftwarejedi/TSJ.Ektron.Linq/blob/master/Provider/EktronExpressionVisitor.cs#L113  That is where the expression is converted to an EktronCriteria.  Also, the line below is there the enum is parsed from the Data method - the pivotal assumption of the entire library.
+- If you are tracking down an error, there is a 99% chance it is from this line: https://github.com/thesoftwarejedi/TSJ.Ektron.Linq/blob/master/Provider/EktronExpressionVisitor.cs#L172  That is where the bad assumption is made described above as needing a better way.
+
 The summary of EktronContext, which is our only public entry point, describes it best:
 
     /// <summary>
