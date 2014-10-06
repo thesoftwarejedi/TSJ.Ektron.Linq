@@ -11,9 +11,10 @@ This early proof of concept is to show how it would be possible to wrap the
 Ektron API into .NET's QueryProvider syntax.  This framework accepts an expression created
 using simple lambda syntax and parses it into Criteria objects and calls to the Manager set
 of APIs as appropriate.  If you have ever used the Entity Framework
-this usage should be familiar to you.  At this time, only "ContentData" is made available
-but the framework is laid for other Manager objects from the Framework to be added
-going forward.  I plan on adding them, and additional functionality, as needed.
+this usage should be familiar to you.  The code currently blindly smashes together
+The Property enums and Data classes hoping that the enum name matches a Data property.
+Obviously a better way needs to be done - but this works for many situations, and
+so I release it as an open idea.
 
 The summary of EktronContext, which is our only public entry point, describes it best:
 
