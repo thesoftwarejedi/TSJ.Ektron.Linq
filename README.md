@@ -16,6 +16,8 @@ The Property enums and Data classes hoping that the enum name matches a Data pro
 Obviously a better way needs to be done - but this works for many situations, and
 so I release it as an open idea.
 
+NOTE: the "better way" to do this will be tracked using issue #1 in github. https://github.com/thesoftwarejedi/TSJ.Ektron.Linq
+
 The summary of EktronContext, which is our only public entry point, describes it best:
 
     /// <summary>
