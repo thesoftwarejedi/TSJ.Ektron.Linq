@@ -61,6 +61,8 @@ namespace TSJ.Ektron.Linq
 
             //Func<T, U, object> queryMethod, ApiAccessMode mode = ApiAccessMode.LoggedInUser, int contentLanguage = int.MinValue
 
+            //leaving the above there for giggles.  This got much more fun below with the glue.
+
             _mode = mode;
             _contentLanguage = contentLanguage;
 
