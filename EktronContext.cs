@@ -81,8 +81,10 @@ namespace TSJ.Ektron.Linq
         }
 
         /// <summary>
-        /// Only once in my career have I needed a glue method, and I can't remember why.  I know this will give me
-        /// a headache later so it's getting documented right here on the glue method
+        /// Only once in my career have I wanted a glue method, and I can't remember why.  I know this will give me
+        /// a headache later so it's getting documented right here on the glue method.  This method is merely for convenience
+        /// so that a dozen of these queries can be made.  There is no logic in here, just returning a query with a queryprovider
+        /// base on the types in the generic typedef
         /// </summary>
         /// <typeparam name="T">The Ektron Manager API class</typeparam>
         /// <typeparam name="U">The Criteria class used to query that manager</typeparam>
