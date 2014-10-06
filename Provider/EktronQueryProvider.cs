@@ -25,7 +25,7 @@ namespace TSJ.Ektron.Linq.Provider
         internal EktronQueryProvider(Func<T, U, object> queryMethod, ApiAccessMode mode = ApiAccessMode.LoggedInUser, int contentLanguage = int.MinValue)
         {
             _queryMethod = queryMethod;
-            if (!Debugger.IsAttached)
+            //if (!Debugger.IsAttached)
             {
                 Manager = new T();
                 Manager.ApiMode = mode;
