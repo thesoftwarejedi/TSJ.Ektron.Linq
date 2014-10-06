@@ -17,7 +17,7 @@ namespace TSJ.Ektron.Linq
                                       .OrderBy(a => a.DateCreated)
                                       .Take(5)
                                       .Skip(10);
-                list.ToArray();
+                list.ToArray();                
             }
         }
     }

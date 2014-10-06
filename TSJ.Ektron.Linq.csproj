@@ -80,15 +80,13 @@
     <Compile Include="EktronContext.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Provider\EktronContentQueryProvider.cs" />
-    <Compile Include="Provider\EktronContentQueryTranslator.cs" />
+    <Compile Include="Provider\EktronQueryProvider.cs" />
+    <Compile Include="Provider\EktronExpressionVisitor.cs" />
+    <Compile Include="Provider\EktronContentExpressionVisitor.cs" />
     <Compile Include="QueryWrapper\Evaluator.cs" />
     <Compile Include="QueryWrapper\Query.cs" />
     <Compile Include="QueryWrapper\QueryProvider.cs" />
     <Compile Include="QueryWrapper\TypeSystem.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

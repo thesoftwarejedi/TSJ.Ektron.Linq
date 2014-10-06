@@ -14,28 +14,33 @@ namespace TSJ.Ektron.Linq.Provider
 {
 
     //theres an awful lot of assumptions in here!
-    internal class EktronContentQueryTranslator : ExpressionVisitor
+    internal class EktronExpressionVisitor<T,U> : ExpressionVisitor where T : Criteria<U>, new()
     {
 
-        ContentCriteria criteria;
-        int take = 0;
-        int skip = 0;
-        bool paging = false;
+        T _criteria;
+        int _take = 0;
+        int _skip = 0;
+        bool _paging = false;
 
-        internal EktronContentQueryTranslator()
+        internal EktronExpressionVisitor(T criteria)
         {
+            _criteria = criteria;
         }
 
-        internal ContentCriteria Translate(Expression ex) 
+        internal EktronExpressionVisitor()
         {
-            criteria = new ContentCriteria();
+            _criteria = new T();
+        }
+
+        internal T Translate(Expression ex) 
+        {
             this.Visit(ex);
             //apply the take/skip
-            if (paging)
+            if (_paging)
             {
-                criteria.PagingInfo = new PagingInfo(take, skip + 1);
+                _criteria.PagingInfo = new PagingInfo(_take, _skip + 1);
             }
-            return criteria;
+            return _criteria;
         }
 
         private static Expression StripQuotes(Expression e)
@@ -63,8 +68,8 @@ namespace TSJ.Ektron.Linq.Provider
                 try
                 {
                     var memberName = ((MemberExpression)lambda.Body).Member.Name;
-                    criteria.OrderByDirection = EkEnumeration.OrderByDirection.Ascending;
-                    criteria.OrderByField = (ContentProperty)Enum.Parse(typeof(ContentProperty), memberName);
+                    _criteria.OrderByDirection = EkEnumeration.OrderByDirection.Ascending;
+                    _criteria.OrderByField = (U)Enum.Parse(typeof(U), memberName);
                 }
                 catch
                 {
@@ -79,8 +84,8 @@ namespace TSJ.Ektron.Linq.Provider
                 try
                 {
                     var memberName = ((MemberExpression)lambda.Body).Member.Name;
-                    criteria.OrderByDirection = EkEnumeration.OrderByDirection.Descending;
-                    criteria.OrderByField = (ContentProperty)Enum.Parse(typeof(ContentProperty), memberName);
+                    _criteria.OrderByDirection = EkEnumeration.OrderByDirection.Descending;
+                    _criteria.OrderByField = (U)Enum.Parse(typeof(U), memberName);
                 }
                 catch
                 {
@@ -91,15 +96,15 @@ namespace TSJ.Ektron.Linq.Provider
             else if (m.Method.DeclaringType == typeof(Queryable) && m.Method.Name == "Take")
             {
                 this.Visit(m.Arguments[0]);
-                paging = true;
-                take += (int)((ConstantExpression)m.Arguments[1]).Value;
+                _paging = true;
+                _take += (int)((ConstantExpression)m.Arguments[1]).Value;
                 return m;
             }
             else if (m.Method.DeclaringType == typeof(Queryable) && m.Method.Name == "Skip")
             {
                 this.Visit(m.Arguments[0]);
-                paging = true;
-                skip += (int)((ConstantExpression)m.Arguments[1]).Value;
+                _paging = true;
+                _skip += (int)((ConstantExpression)m.Arguments[1]).Value;
                 return m;
             }
             throw new NotSupportedException(string.Format("The method '{0}' is not supported", m.Method.Name));
@@ -143,13 +148,13 @@ namespace TSJ.Ektron.Linq.Provider
             {
                 var leftVal = ((ConstantExpression)left).Value;
                 var rightVal = ((ConstantExpression)right).Value;
-                if (leftVal.GetType() == typeof(ContentProperty))
+                if (leftVal.GetType() == typeof(U))
                 {
-                    criteria.AddFilter((ContentProperty)leftVal, op, rightVal);
+                    _criteria.AddFilter((U)leftVal, op, rightVal);
                 }
-                else if (rightVal.GetType() == typeof(ContentProperty))
+                else if (rightVal.GetType() == typeof(U))
                 {
-                    criteria.AddFilter((ContentProperty)rightVal, op, leftVal);
+                    _criteria.AddFilter((U)rightVal, op, leftVal);
                 }
                 return b;
             }
@@ -162,21 +167,10 @@ namespace TSJ.Ektron.Linq.Provider
             if (m.Expression != null && m.Expression.NodeType == ExpressionType.Parameter)
             {
                 var memberName = m.Member.Name;
-                if (memberName == "XmlConfiguration")
-                {
-                    return Expression.Constant(ContentProperty.XmlConfigurationId);
-                }
-                else
-                {
-                    //the member name called on the contentdata is the same as the name on contentproperty
-                    return Expression.Constant(Enum.Parse(typeof(ContentProperty), memberName));
-                }
+                //the member name called on the lambda parameter is the same as the name on 
+                //the U type (ContentProperty, MenuProperty, etc...)
+                return Expression.Constant(Enum.Parse(typeof(U), memberName));
             } 
-            else if (m.Expression != null && m.Member.DeclaringType == typeof(XmlConfigData) && m.Member.Name == "Id")
-            {
-                //hit the parent (xmlconfig)
-                return this.Visit(m.Expression);
-            }
             throw new NotSupportedException(string.Format("The member '{0}' is not supported", m.Member.Name));
         }
     }
