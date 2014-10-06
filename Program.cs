@@ -12,12 +12,15 @@ namespace TSJ.Ektron.Linq
         {
             using (var ctx = new EktronContext())
             {
+
                 var list = ctx.Content.Where(a => a.XmlConfiguration.Id == 123123123 
                                                         && a.IsPublished == true)
                                       .OrderBy(a => a.DateCreated)
                                       .Take(5)
                                       .Skip(10);
-                list.ToArray();                
+                list.ToArray();
+
+                var anotherList = ctx.Menus.Where(a => a.ParentId == 123);
             }
         }
     }

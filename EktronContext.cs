@@ -56,7 +56,8 @@ namespace TSJ.Ektron.Linq
             _contentLanguage = contentLanguage;
 
             this.Assets = Glue<AssetManager, AssetCriteria, AssetProperty, ContentAssetData>((a, b) => a.GetList(b));
-            this.Content = Glue<ContentManager, ContentCriteria, ContentProperty, ContentData>((a, b) => a.GetList(b));
+            //content has a custom visitor for the smartformid
+            this.Content = Glue<ContentManager, ContentCriteria, ContentProperty, ContentData>((a, b) => a.GetList(b), new EktronContentExpressionVisitor());
             this.Collections = Glue<CollectionManager, CollectionCriteria, ContentCollectionProperty, ContentCollectionData>((a, b) => a.GetList(b));
             this.Library = Glue<LibraryManager, LibraryCriteria, LibraryProperty, LibraryData>((a, b) => a.GetList(b));
             this.WebCalenders = Glue<WebCalendarManager, WebCalendarCriteria, WebCalendarProperty, WebCalendarData>((a, b) => a.GetList(b));
@@ -93,6 +94,12 @@ namespace TSJ.Ektron.Linq
             where U : Criteria<V>, new()
         {
             return Glue<T, U, V, W>((a,b) => typeof(T).GetMethod("GetList", new Type[] { typeof(U) }).Invoke(a, new[] {b}));
+        }
+        private Query<W> Glue<T, U, V, W>(Func<T, U, object> queryMethod, EktronExpressionVisitor<U, V> visitor)
+            where T : CmsApi<T>, new()
+            where U : Criteria<V>, new()
+        {
+            return new Query<W>(new EktronQueryProvider<T, U, V>(queryMethod, visitor, _mode, _contentLanguage));
         }
 
         public void Dispose()
